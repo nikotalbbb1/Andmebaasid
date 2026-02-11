@@ -89,3 +89,45 @@ select * from brands
 end;
 --kutse
 exec uuendabrand 3, 'jhgk' 
+
+  
+  --iseseisev 
+  
+--1. lisamine
+
+create procedure lisaCategory
+@categoryname varchar(35)
+as
+begin
+insert into categories(categoryname)
+values(@categoryname)
+select * from categories;
+end;
+
+exec lisaCategory 'särk'
+
+--2. uuendamine
+create procedure uendadaCategory
+@id int,
+@uus_categoyNimi varchar(30)
+as
+begin
+update categories set categoryname = @uus_categoyNimi
+where categoryID = @id;
+select * from categories;
+end;
+drop procedure uendadaCategory
+
+exec uendadaCategory 3, 'ddsds'
+
+--3. kustutamine
+create procedure kustutaCategory
+@id int
+as
+begin
+select * from categories;
+delete from categories where categoryID = @id;
+select * from categories;
+end;
+
+exec kustutaCategory 3;
