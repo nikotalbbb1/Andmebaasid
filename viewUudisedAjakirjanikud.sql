@@ -21,9 +21,9 @@ INSERT INTO ajakirjanik(nimi,telefon)
 values ('Lev','5757755874'),('Anton','57357597')
 
 INSERT into uudised(uudisPealkiri,kuupaev,ajakirjanikID)
-values ('Homme on ises töö päev','2025-03-12',1),
+values ('Homme on ises töö päev','2025-03-14',1),
 ('Täna on andmebaaside tund','2025-03-12',1),
-('Täna on vihane ilm','2025-03-12',2)
+('Täna on vihane ilm','2025-03-13',2)
 
 SELECT * FROM ajakirjanik;
 Select * from uudised;
@@ -100,5 +100,25 @@ ON u.ajalehtID=aj.ajalehtID;
 select* from autoriuudisedajalehes;
 select * from uudised;
 update autoriuudisedajalehes set kuupaev='2026-03-18';
+
+
+--konkreetsed
+create view uudisedKonkreetneKuupaev as
+select * from uudised
+where kuupaev like '2025-03-14';
+
+select * from uudisedKonkreetneKuupaev;
+
+create view KonkreetneAjakirjanikku as
+select * from ajakirjanik
+where nimi like 'L%';
+
+select*from KonkreetneAjakirjanikku;
+
+create view KonkreetneAjaleht as
+select * from ajaleht
+where ajalehtNimetus like 'P%';
+
+select * from KonkreetneAjaleht
 
 
