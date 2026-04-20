@@ -1,0 +1,78 @@
+create database hobusedDb
+use hobusedDb
+
+create table hobused(
+id int primary key identity(1,1),
+nimi varchar(25),
+vanus int,
+kiirus int);
+
+create table logi(
+id2 int primary key identity(1,1),
+kuupaev datetime,
+andmed text,
+kasutaja varchar(30));
+
+create trigger hobuseLisa
+on hobused
+for insert
+as
+insert into logi(kuupaev,andmed,kasutaja)
+select 
+getdate(),
+concat('lisatud hobune: ', inserted.nimi, ' Hobuse vanus : ' , inserted.vanus, ' Hobuse kiirus : ' , inserted.kiirus),
+SYSTEM_USER
+from inserted;
+
+
+
+insert into hobused(nimi,vanus,kiirus)
+values('Test',10, 40)
+
+select * from hobused;
+select * from logi
+
+create trigger hobuseUuenda
+on hobused
+for update
+as
+insert into logi(kuupaev,andmed,kasutaja)
+select 
+getdate(), 
+concat('vana hobuse andmed: ', d.nimi, ' | vanus: ', d.vanus, ' | kiirus: ', d.kiirus, 
+' uued hobuse andmed: ', i.nimi, ' | vanus: ', i.vanus, ' | kiirus: ', i.kiirus),
+SYSTEM_USER
+from deleted d inner join inserted i 
+on d.id=i.id;
+DROP TRIGGER hobuseUuenda
+
+update hobused set nimi='uus Hobune', vanus=22, kiirus=33
+where id=11;
+select * from hobused
+select * from logi
+
+create trigger hobuseKustuta
+on hobused
+for delete
+as
+insert into logi(kuupaev,andmed,kasutaja)
+select 
+getdate(), 
+concat('kustutatud hobune: ', deleted.nimi, ' | vanus : ', deleted.vanus, ' | kiirus : ', deleted.kiirus),
+SYSTEM_USER
+from deleted;
+
+
+delete from hobused where id=10;
+select * from hobused
+select * from logi
+delete from logi
+
+GRANT SELECT 
+ON hobused TO hobuseDirektor;
+
+GRANT UPDATE 
+ON hobused TO hobuseDirektor;
+
+GRANT DELETE
+ON hobused TO hobuseDirektor;
